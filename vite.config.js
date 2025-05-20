@@ -1,18 +1,33 @@
-import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import federation from "@originjs/vite-plugin-federation";
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
-
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
+    federation({
+      name: "mfe2",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./App": "./src/App.vue",
+      },
+      shared: ["vue"],
+    }),
   ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+  server: {
+    port: 3002,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
     },
   },
-})
+  preview: {
+    port: 5002,
+  },
+  build: {
+    target: "esnext",
+    minify: false,
+    cssCodeSplit: false,
+    outDir: "dist",
+    assetsDir: "",
+  },
+});
