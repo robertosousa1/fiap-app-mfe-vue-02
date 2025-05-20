@@ -9,7 +9,7 @@ export default defineConfig({
       name: "mfe2",
       filename: "remoteEntry.js",
       exposes: {
-        "./mount": "./src/mfe-entry.js",
+        "./App": "./src/App.vue",
       },
       shared: ["vue"],
     }),
